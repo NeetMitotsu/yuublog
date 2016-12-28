@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuublog.mapper.ArtcleMapper" >
+  <resultMap id="BaseResultMap" type="com.yuublog.pojo.Artcle" >
+    <id column="art_id" property="artId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="delflag" property="delflag" jdbcType="BIT" />
+    <result column="create" property="create" jdbcType="TIMESTAMP" />
+    <result column="update" property="update" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    art_id, title, delflag, create, update
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yuublog.pojo.ArtcleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from artcle
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from artcle
+    where art_id = #{artId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from artcle
+    where art_id = #{artId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yuublog.pojo.ArtcleExample" >
+    delete from artcle
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yuublog.pojo.Artcle" >
+    insert into artcle (art_id, title, delflag, 
+      create, update)
+    values (#{artId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{delflag,jdbcType=BIT}, 
+      #{create,jdbcType=TIMESTAMP}, #{update,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuublog.pojo.Artcle" >
+    insert into artcle
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="artId != null" >
+        art_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="delflag != null" >
+        delflag,
+      </if>
+      <if test="create != null" >
+        create,
+      </if>
+      <if test="update != null" >
+        update,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="artId != null" >
+        #{artId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        #{delflag,jdbcType=BIT},
+      </if>
+      <if test="create != null" >
+        #{create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update != null" >
+        #{update,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yuublog.pojo.ArtcleExample" resultType="java.lang.Integer" >
+    select count(*) from artcle
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update artcle
+    <set >
+      <if test="record.artId != null" >
+        art_id = #{record.artId,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delflag != null" >
+        delflag = #{record.delflag,jdbcType=BIT},
+      </if>
+      <if test="record.create != null" >
+        create = #{record.create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.update != null" >
+        update = #{record.update,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update artcle
+    set art_id = #{record.artId,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      delflag = #{record.delflag,jdbcType=BIT},
+      create = #{record.create,jdbcType=TIMESTAMP},
+      update = #{record.update,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuublog.pojo.Artcle" >
+    update artcle
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="delflag != null" >
+        delflag = #{delflag,jdbcType=BIT},
+      </if>
+      <if test="create != null" >
+        create = #{create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update != null" >
+        update = #{update,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where art_id = #{artId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuublog.pojo.Artcle" >
+    update artcle
+    set title = #{title,jdbcType=VARCHAR},
+      delflag = #{delflag,jdbcType=BIT},
+      create = #{create,jdbcType=TIMESTAMP},
+      update = #{update,jdbcType=TIMESTAMP}
+    where art_id = #{artId,jdbcType=INTEGER}
+  </update>
+</mapper>

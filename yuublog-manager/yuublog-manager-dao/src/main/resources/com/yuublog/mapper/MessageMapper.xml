@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuublog.mapper.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.yuublog.pojo.Message" >
+    <id column="message_id" property="messageId" jdbcType="INTEGER" />
+    <result column="create" property="create" jdbcType="TIMESTAMP" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="is_parent" property="isParent" jdbcType="BIT" />
+    <result column="art_id" property="artId" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yuublog.pojo.Message" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    message_id, create, nickname, email, is_parent, art_id, parent_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yuublog.pojo.MessageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yuublog.pojo.MessageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from message
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from message
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yuublog.pojo.MessageExample" >
+    delete from message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yuublog.pojo.Message" >
+    insert into message (message_id, create, nickname, 
+      email, is_parent, art_id, 
+      parent_id, content)
+    values (#{messageId,jdbcType=INTEGER}, #{create,jdbcType=TIMESTAMP}, #{nickname,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{isParent,jdbcType=BIT}, #{artId,jdbcType=INTEGER}, 
+      #{parentId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuublog.pojo.Message" >
+    insert into message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        message_id,
+      </if>
+      <if test="create != null" >
+        create,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="isParent != null" >
+        is_parent,
+      </if>
+      <if test="artId != null" >
+        art_id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="messageId != null" >
+        #{messageId,jdbcType=INTEGER},
+      </if>
+      <if test="create != null" >
+        #{create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isParent != null" >
+        #{isParent,jdbcType=BIT},
+      </if>
+      <if test="artId != null" >
+        #{artId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yuublog.pojo.MessageExample" resultType="java.lang.Integer" >
+    select count(*) from message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update message
+    <set >
+      <if test="record.messageId != null" >
+        message_id = #{record.messageId,jdbcType=INTEGER},
+      </if>
+      <if test="record.create != null" >
+        create = #{record.create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.nickname != null" >
+        nickname = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isParent != null" >
+        is_parent = #{record.isParent,jdbcType=BIT},
+      </if>
+      <if test="record.artId != null" >
+        art_id = #{record.artId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update message
+    set message_id = #{record.messageId,jdbcType=INTEGER},
+      create = #{record.create,jdbcType=TIMESTAMP},
+      nickname = #{record.nickname,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      is_parent = #{record.isParent,jdbcType=BIT},
+      art_id = #{record.artId,jdbcType=INTEGER},
+      parent_id = #{record.parentId,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update message
+    set message_id = #{record.messageId,jdbcType=INTEGER},
+      create = #{record.create,jdbcType=TIMESTAMP},
+      nickname = #{record.nickname,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      is_parent = #{record.isParent,jdbcType=BIT},
+      art_id = #{record.artId,jdbcType=INTEGER},
+      parent_id = #{record.parentId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuublog.pojo.Message" >
+    update message
+    <set >
+      <if test="create != null" >
+        create = #{create,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="isParent != null" >
+        is_parent = #{isParent,jdbcType=BIT},
+      </if>
+      <if test="artId != null" >
+        art_id = #{artId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yuublog.pojo.Message" >
+    update message
+    set create = #{create,jdbcType=TIMESTAMP},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      is_parent = #{isParent,jdbcType=BIT},
+      art_id = #{artId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuublog.pojo.Message" >
+    update message
+    set create = #{create,jdbcType=TIMESTAMP},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      is_parent = #{isParent,jdbcType=BIT},
+      art_id = #{artId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER}
+    where message_id = #{messageId,jdbcType=INTEGER}
+  </update>
+</mapper>
